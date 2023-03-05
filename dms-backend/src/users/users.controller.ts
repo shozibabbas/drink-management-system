@@ -1,8 +1,17 @@
-import { Controller, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { Controller, Get } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { User } from '../entities';
+import { Repository } from 'sequelize-typescript';
 
-@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
-  constructor() {}
+  constructor(
+    @InjectModel(User)
+    private userRepository: Repository<User>,
+  ) {}
+
+  @Get()
+  getUsers() {
+    return this.userRepository.findAll();
+  }
 }

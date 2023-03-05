@@ -7,6 +7,7 @@ import { join } from 'path';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { Drink, Role, User, UserHasDrink } from './entities';
 
 const ENV = process.env.NODE_ENV;
 
@@ -31,10 +32,7 @@ const ENV = process.env.NODE_ENV;
           username: configService.get<string>('DB_USER'),
           password: configService.get<string>('DB_PASS'),
           database: configService.get<string>('DB_NAME'),
-          models: [
-            // insert model classes here
-            // Users
-          ],
+          models: [User, Drink, UserHasDrink, Role],
           synchronize: configService.get<boolean>('DB_SYNC'),
         };
       },
