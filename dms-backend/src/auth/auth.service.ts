@@ -14,21 +14,21 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username, pass);
     if (user) {
-      const { user_pass, ...result } = user;
+      const { password, ...result } = user;
       return result;
     }
     return null;
   }
 
   login(user: any) {
-    const payload = { username: user.user_login, sub: user.ID };
-    const { ID, user_pass, ...result } = user;
+    const payload = { email: user.email, sub: user.id, role: user.roleId };
     return {
       access_token: this.jwtService.sign(payload, {
         expiresIn: this.configService.get<string>('JWT_EXPIRES_IN'),
       }),
       expires_in: this.configService.get<string>('JWT_EXPIRES_IN'),
-      ...result,
+      email: user.email,
+      role: user.Role.id + ':' + user.Role.name,
     };
   }
 }

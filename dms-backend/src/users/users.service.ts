@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'sequelize-typescript';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from '../entities';
+import { Role, User, UserHasDrink } from '../entities';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User)
     private userRepository: Repository<User>,
+    @InjectModel(UserHasDrink)
+    private userHasDrinkRepository: Repository<UserHasDrink>,
   ) {}
 
   async findOne(email: string, password: string = null) {
@@ -17,8 +19,14 @@ export class UsersService {
           email,
           password,
         },
+        include: [Role],
       })
-      .then((user: any) => user.dataValues);
+      .then((user: any) => {
+        if (user) {
+          return user.dataValues;
+        }
+        return null;
+      });
   }
 
   async validate(email: string) {
@@ -27,6 +35,7 @@ export class UsersService {
         where: {
           email,
         },
+        include: [Role],
       })
       .then((user: any) => user.dataValues);
   }

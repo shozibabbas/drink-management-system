@@ -1,10 +1,12 @@
 import {
-  Column,
-  DataType,
-  HasMany,
-  Index,
   Model,
   Table,
+  Column,
+  DataType,
+  Index,
+  Sequelize,
+  ForeignKey,
+  HasMany,
 } from 'sequelize-typescript';
 import { User } from './User';
 

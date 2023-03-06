@@ -1,2 +1,4 @@
 1:N, id, role_id, role, user
+1:N, id, user_id, user, user_has_drink
+1:N, id, drink_id, drink, user_has_drink
 N:N, user_id, drink_id, user, drink, user_has_drink

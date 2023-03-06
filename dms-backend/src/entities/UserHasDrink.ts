@@ -1,10 +1,12 @@
 import {
-  Column,
-  DataType,
-  ForeignKey,
-  Index,
   Model,
   Table,
+  Column,
+  DataType,
+  Index,
+  Sequelize,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { User } from './User';
 import { Drink } from './Drink';
@@ -59,4 +61,10 @@ export class UserHasDrink
 
   @Column({ field: 'is_deleted', type: DataType.TINYINT, defaultValue: '0' })
   isDeleted?: number;
+
+  @BelongsTo(() => User)
+  User?: User;
+
+  @BelongsTo(() => Drink)
+  Drink?: Drink;
 }

@@ -1,13 +1,16 @@
 import {
-  BelongsToMany,
+  Model,
+  Table,
   Column,
   DataType,
   Index,
-  Model,
-  Table,
+  Sequelize,
+  ForeignKey,
+  HasMany,
+  BelongsToMany,
 } from 'sequelize-typescript';
-import { User } from './User';
 import { UserHasDrink } from './UserHasDrink';
+import { User } from './User';
 
 export interface DrinkAttributes {
   id?: number;
@@ -25,6 +28,9 @@ export class Drink
 
   @Column({ type: DataType.STRING(100) })
   name!: string;
+
+  @HasMany(() => UserHasDrink, { sourceKey: 'id' })
+  UserHasDrinks?: UserHasDrink[];
 
   @BelongsToMany(() => User, () => UserHasDrink)
   Users?: User[];

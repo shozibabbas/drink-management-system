@@ -1,16 +1,18 @@
 import {
-  BelongsTo,
-  BelongsToMany,
-  Column,
-  DataType,
-  ForeignKey,
-  Index,
   Model,
   Table,
+  Column,
+  DataType,
+  Index,
+  Sequelize,
+  ForeignKey,
+  BelongsTo,
+  HasMany,
+  BelongsToMany,
 } from 'sequelize-typescript';
 import { Role } from './Role';
-import { Drink } from './Drink';
 import { UserHasDrink } from './UserHasDrink';
+import { Drink } from './Drink';
 
 export interface UserAttributes {
   id?: number;
@@ -62,6 +64,9 @@ export class User
 
   @BelongsTo(() => Role)
   Role?: Role;
+
+  @HasMany(() => UserHasDrink, { sourceKey: 'id' })
+  UserHasDrinks?: UserHasDrink[];
 
   @BelongsToMany(() => Drink, () => UserHasDrink)
   Drinks?: Drink[];

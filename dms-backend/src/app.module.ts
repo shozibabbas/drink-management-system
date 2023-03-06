@@ -8,6 +8,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { Drink, Role, User, UserHasDrink } from './entities';
+import { DrinksModule } from './drinks/drinks.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -38,6 +39,7 @@ const ENV = process.env.NODE_ENV;
       },
       inject: [ConfigService],
     }),
+    DrinksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
