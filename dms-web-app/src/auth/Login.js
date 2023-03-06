@@ -12,7 +12,7 @@ function Login() {
 	const [login, {isLoading, error}] = useLoginMutation();
 	return (
 		<Formik
-			initialValues={{username: "", password: ""}}
+			initialValues={{email: "", password: ""}}
 			onSubmit={(values) => {
 				login(values)
 					.unwrap()
@@ -35,12 +35,12 @@ function Login() {
 						searchParams.has("prompt") &&
                         <Alert variant={"warning"} className={"mb-4"}>You need to login to continue</Alert>}
 					<FormControl
-						type="text"
-						name="username"
-						placeholder={"Username"}
+						type="email"
+						name="email"
+						placeholder={"Email"}
 						onChange={handleChange}
 						onBlur={handleBlur}
-						value={values.username}
+						value={values.email}
 					/>
 					<FormControl
 						type="password"

@@ -6,8 +6,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ProtectedRoute from "./shared/ProtectedRoute";
 import AuthLayout from "./auth/AuthLayout";
 import Login from "./auth/Login";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCoffee} from "@fortawesome/free-solid-svg-icons";
+import DrinksLayout from "./drinks/DrinksLayout";
+import DrinksListing from "./drinks/DrinksListing";
 
 function App() {
 	const criticalError = useSelector(selectCriticalError);
@@ -21,7 +21,9 @@ function App() {
 			<Routes>
 				<Route path="/" element={
 					<ProtectedRoute>
-                        This app works! <FontAwesomeIcon icon={faCoffee}/>
+						<DrinksLayout>
+							<DrinksListing/>
+						</DrinksLayout>
 					</ProtectedRoute>
 				}/>
 				<Route path="/auth" element={<AuthLayout/>}>

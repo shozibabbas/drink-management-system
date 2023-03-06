@@ -5,8 +5,8 @@ import {setCriticalError} from "./critical-error.slice";
 const sliceName = "user";
 const initialState = {
 	access_token: null,
-	username: null,
 	email: null,
+	role: null
 };
 
 export const UserSlice = createSlice({
@@ -15,8 +15,8 @@ export const UserSlice = createSlice({
 	reducers: {
 		logout(state) {
 			state.access_token = null;
-			state.username = null;
 			state.email = null;
+			state.role = null;
 		},
 	},
 	extraReducers(builder) {
@@ -25,16 +25,16 @@ export const UserSlice = createSlice({
 			switch (status) {
 			case 401:
 				state.access_token = null;
-				state.username = null;
 				state.email = null;
+				state.role = null;
 				break;
 			}
 		});
 		builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, action) => {
-			const {access_token, user_login, user_email} = action.payload;
+			const {access_token, email, role} = action.payload;
 			state.access_token = access_token;
-			state.username = user_login;
-			state.email = user_email;
+			state.email = email;
+			state.role = role;
 		});
 	}
 });

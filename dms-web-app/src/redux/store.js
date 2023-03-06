@@ -5,6 +5,7 @@ import {UserSlice} from "./user.slice";
 import {CriticalErrorSlice} from "./critical-error.slice";
 import storage from "redux-persist/lib/storage";
 import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE} from "redux-persist";
+import {drinksApi} from "./drinks.api";
 
 const persistConfig = {
 	key: "root",
@@ -12,6 +13,7 @@ const persistConfig = {
 	storage,
 	blacklist: [
 		authApi.reducerPath,
+		drinksApi.reducerPath,
 		CriticalErrorSlice.name,
 		// add all APIs to black list to stop persistence
 		// for example
@@ -23,6 +25,7 @@ const appReducer = combineReducers({
 	[UserSlice.name]: UserSlice.reducer,
 	[CriticalErrorSlice.name]: CriticalErrorSlice.reducer,
 	[authApi.reducerPath]: authApi.reducer,
+	[drinksApi.reducerPath]: drinksApi.reducer,
 	// add all APIs and slices here
 	// for example
 	// [authApi.reducerPath]: authApi.reducer,
@@ -47,6 +50,7 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) => {
 		const middlewares = [
 			authApi.middleware,
+			drinksApi.middleware,
 			// add all API middlewares here
 		];
 		return getDefaultMiddleware({
