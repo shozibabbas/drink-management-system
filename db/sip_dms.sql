@@ -34,9 +34,11 @@ DROP TABLE IF EXISTS `sip_dms`.`user` ;
 
 CREATE TABLE IF NOT EXISTS `sip_dms`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `role_id` INT NOT NULL,
+  `role_id` INT NOT NULL DEFAULT 1,
+  `name` VARCHAR(100) NOT NULL,
   `email` VARCHAR(200) NOT NULL,
-  `password` VARCHAR(200) NOT NULL,
+  `password` VARCHAR(200) NULL,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 0,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NULL,
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
@@ -108,8 +110,8 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `sip_dms`;
-INSERT INTO `sip_dms`.`user` (`id`, `role_id`, `email`, `password`, `create_time`, `update_time`, `is_deleted`) VALUES (1, 1, 'shozib.abbas@siparadigm.com', 'test123', DEFAULT, NULL, DEFAULT);
-INSERT INTO `sip_dms`.`user` (`id`, `role_id`, `email`, `password`, `create_time`, `update_time`, `is_deleted`) VALUES (2, 2, 'muhammad.nawaz@siparadigm.com', 'test123', DEFAULT, NULL, DEFAULT);
+INSERT INTO `sip_dms`.`user` (`id`, `role_id`, `name`, `email`, `password`, `is_active`, `create_time`, `update_time`, `is_deleted`) VALUES (1, 1, 'Sayyed Shozib Abbas', 'shozib.abbas@siparadigm.com', 'test123', 1, DEFAULT, NULL, DEFAULT);
+INSERT INTO `sip_dms`.`user` (`id`, `role_id`, `name`, `email`, `password`, `is_active`, `create_time`, `update_time`, `is_deleted`) VALUES (2, 2, 'Muhammad Nawaz', 'muhammad.nawaz@siparadigm.com', 'test123', 1, DEFAULT, NULL, DEFAULT);
 
 COMMIT;
 
