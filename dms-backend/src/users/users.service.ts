@@ -25,8 +25,30 @@ export class UsersService {
         if (user) {
           return user.dataValues;
         }
-        return null;
       });
+  }
+
+  async getOrCreate(email: string, name: string, password: string) {
+    const [user, created] = await this.userRepository.findOrCreate({
+      where: {
+        email,
+      },
+      defaults: {
+        name,
+        email,
+        password,
+        isActive: password ? 1 : 0,
+      },
+      include: [Role],
+    });
+    let accountCreated = created;
+    if (!created && !user.isActive && password) {
+      user.password = password;
+      user.isActive = 1;
+      await user.save();
+      accountCreated = true;
+    }
+    return { user, accountCreated };
   }
 
   async validate(email: string) {
@@ -37,6 +59,11 @@ export class UsersService {
         },
         include: [Role],
       })
-      .then((user: any) => user.dataValues);
+      .then((user: any) => {
+        if (user) {
+          return user.dataValues;
+        }
+        return null;
+      });
   }
 }

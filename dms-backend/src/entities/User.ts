@@ -1,14 +1,13 @@
 import {
-  Model,
-  Table,
+  BelongsTo,
+  BelongsToMany,
   Column,
   DataType,
-  Index,
-  Sequelize,
   ForeignKey,
-  BelongsTo,
   HasMany,
-  BelongsToMany,
+  Index,
+  Model,
+  Table,
 } from 'sequelize-typescript';
 import { Role } from './Role';
 import { UserHasDrink } from './UserHasDrink';
@@ -16,9 +15,11 @@ import { Drink } from './Drink';
 
 export interface UserAttributes {
   id?: number;
-  roleId: number;
+  roleId?: number;
+  name: string;
   email: string;
-  password: string;
+  password?: string;
+  isActive?: number;
   createTime?: Date;
   updateTime?: Date;
   isDeleted?: number;
@@ -34,20 +35,26 @@ export class User
   id?: number;
 
   @ForeignKey(() => Role)
-  @Column({ field: 'role_id', type: DataType.INTEGER })
+  @Column({ field: 'role_id', type: DataType.INTEGER, defaultValue: '1' })
   @Index({
     name: 'fk_user_role1_idx',
     using: 'BTREE',
     order: 'ASC',
     unique: false,
   })
-  roleId!: number;
+  roleId?: number;
+
+  @Column({ type: DataType.STRING(100) })
+  name!: string;
 
   @Column({ type: DataType.STRING(200) })
   email!: string;
 
-  @Column({ type: DataType.STRING(200) })
-  password!: string;
+  @Column({ allowNull: true, type: DataType.STRING(200) })
+  password?: string;
+
+  @Column({ field: 'is_active', type: DataType.TINYINT, defaultValue: '0' })
+  isActive?: number;
 
   @Column({
     field: 'create_time',
