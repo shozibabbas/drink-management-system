@@ -9,3 +9,39 @@ $font-family-base: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Hel
 .critical-error-modal pre {
   max-height: 10rem;
 }
+
+.rtl {
+  direction: rtl;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.admin-table {
+  table-layout: fixed;
+}
+
+.admin-table .serial {
+  width: 5%;
+}
+
+.admin-table .date {
+  width: 20%;
+}
+
+.admin-table .drink {
+  width: 15%;
+}
+
+.admin-table .employee-name, .admin-table .employee-email {
+  width: 25%;
+}
+
+.admin-table .actions {
+  width: 10%;
+}
+
+.admin-table tr td {
+  vertical-align: middle;
+}

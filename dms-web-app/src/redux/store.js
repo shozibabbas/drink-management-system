@@ -34,11 +34,11 @@ const appReducer = combineReducers({
 
 const rootReducer = (state, action) => {
 	// handle logout and critical error situations and empty storage
-	if (action.type === "user/logout" || (action.type === "criticalError/setCriticalError" && action.payload.status === 401)) {
-		storage.removeItem("persist:root");
-
-		return appReducer(undefined, action);
-	}
+	// if (action.type === "user/logout" || (action.type === "criticalError/setCriticalError" && action.payload.status === 401)) {
+	// 	storage.removeItem("persist:root");
+	//
+	// 	return appReducer(undefined, action);
+	// }
 	return appReducer(state, action);
 };
 
