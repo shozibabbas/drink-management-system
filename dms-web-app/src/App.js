@@ -13,6 +13,7 @@ import IndexRedirection from "./IndexRedirection";
 import GuestConsumeDrink from "./guest/GuestConsumeDrink";
 import AdminLayout from "./admin/AdminLayout";
 import AdminListing from "./admin/AdminListing";
+import GenerateBills from "./admin/GenerateBills";
 
 function App() {
 	const criticalError = useSelector(selectCriticalError);
@@ -44,6 +45,11 @@ function App() {
 					<Route index element={<Navigate to="/auth/login" replace/>}/>
 				</Route>
 				<Route path="/admin" element={<AdminLayout/>}>
+					<Route path="generate-bills" element={
+						<ProtectedRoute>
+							<GenerateBills/>
+						</ProtectedRoute>
+					}/>
 					<Route index element={
 						<ProtectedRoute>
 							<AdminListing/>

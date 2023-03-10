@@ -10,26 +10,30 @@ import {Button, Col, Container, Form, FormControl, InputGroup, Row, Spinner, Tab
 import {MONTHS} from "../shared/Constants";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faReply, faTrash} from "@fortawesome/free-solid-svg-icons";
+import UltimatePaginationBootstrap5 from "../shared/Bootstrap5Pagination";
+import {useNavigate} from "react-router-dom";
 
 function AdminListing() {
+	const navigate = useNavigate();
 	const [year, setYear] = useState((new Date()).getFullYear());
 	const [month, setMonth] = useState((new Date()).getMonth() + 1);
 	const [day, setDay] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [drinkId, setDrinkId] = useState(0);
 	const [userId, setUserId] = useState(0);
-	const {data, isLoading, error} = useGetAllUserDrinksQuery({year, month, userId});
-	const {data: drinks, isLoading: drinksLoading, error: drinksError} = useGetDrinksQuery();
+	const [page, setPage] = useState(1);
+	const {data, isFetching, error} = useGetAllUserDrinksQuery({year, month, userId, rowsPerPage, page});
+	const {data: drinks, isLoading: drinksFetching, error: drinksError} = useGetDrinksQuery();
 	const {
 		data: drinkingUsers,
-		isLoading: drinkingUsersIsLoading,
+		isLoading: drinkingUsersIsFetching,
 		error: drinkingUsersError
 	} = useGetDrinkingUsersQuery({year, month});
 	const {count, rows} = data || {};
 	const [deleteUserDrink] = useDeleteUserDrinkMutation();
 	const [retrieveUserDrink] = useRetrieveUserDrinkMutation();
 
-	if (isLoading || drinkingUsersIsLoading || drinksLoading) {
+	if (isFetching || drinkingUsersIsFetching || drinksFetching) {
 		return (
 			<div className={"text-center m-3"}>
 				<Spinner animation={"border"}/>
@@ -46,6 +50,12 @@ function AdminListing() {
 
 	let filteredData = day !== 0 ? rows.filter(d => (new Date(d.createTime)).getDate() === day) : rows;
 	filteredData = drinkId !== 0 ? filteredData.filter(d => d.drinkId === drinkId) : filteredData;
+
+	let minRecordNum = (rowsPerPage * (page - 1)) + 1, maxRecordNum = rowsPerPage * page,
+		extraViewCondition = day || drinkId && filteredData.length !== count;
+	if (maxRecordNum > count) {
+		maxRecordNum = count;
+	}
 	return (
 		<Container fluid={true}>
 			{/*<Row>*/}
@@ -138,7 +148,7 @@ function AdminListing() {
 									className={"d-flex justify-content-start align-items-center"}>
 									<InputGroup>
 										{
-											(day || drinkId && filteredData.length !== count) ? (
+											extraViewCondition ? (
 												<>
 													<FormControl
 														type={"text"}
@@ -159,7 +169,7 @@ function AdminListing() {
 								</Col>
 								<Col md={day || drinkId ? 7 : 8}
 									className={"d-flex justify-content-center align-items-center"}>
-                                    Showing 1 to 10 of 20 record(s)
+                                    Showing {extraViewCondition ? `${filteredData.length} out of ` : ""} {minRecordNum} to {maxRecordNum} of {count} record{count > 1 ? "s" : ""}
 								</Col>
 								<Col md={2}>
 									<InputGroup>
@@ -236,6 +246,30 @@ function AdminListing() {
 					</Table>
 				</Col>
 			</Row>
+			{
+				filteredData.length > 0 && (
+					<Row>
+						<Col>
+							<UltimatePaginationBootstrap5
+								currentPage={page}
+								totalPages={Math.ceil(count / rowsPerPage)}
+								onChange={setPage}
+							/>
+						</Col>
+						<Col className={"text-end"}>
+							<Button onClick={() => navigate("/admin/generate-bills", {
+								state: {
+									year,
+									month,
+									userId,
+									user: drinkingUsers.find(x => x.id === userId)
+								}
+							})}>Generate
+                                Bill{userId ? "" : "s"} {userId ? "for " + drinkingUsers.find(x => x.id === userId).name : ""} of {MONTHS.find(x => x.id === month).name} {year}</Button>
+						</Col>
+					</Row>
+				)
+			}
 		</Container>
 	);
 }

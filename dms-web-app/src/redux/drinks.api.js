@@ -37,7 +37,11 @@ export const drinksApi = createApi({
 		}),
 		getDrinkingUsers: builder.query({
 			query: (params) => ({url: "/drinking_users", method: "get", params}),
-		})
+		}),
+		generateBills: builder.query({
+			query: (params) => ({url: "/generate-bills", method: "get", params}),
+			providesTags: ["admin-drinks"]
+		}),
 	})
 });
 
@@ -49,5 +53,6 @@ export const {
 	useGetAllUserDrinksQuery,
 	useDeleteUserDrinkMutation,
 	useRetrieveUserDrinkMutation,
-	useGetDrinkingUsersQuery
+	useGetDrinkingUsersQuery,
+	useGenerateBillsQuery
 } = drinksApi;

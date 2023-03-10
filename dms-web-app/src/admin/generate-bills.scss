@@ -1,0 +1,24 @@
+@media print {
+
+  body {
+    margin: 0;
+    font-size: 12px;
+  }
+
+  .navbar, .meta-info {
+    display: none !important;
+  }
+
+  table, table tr td, table tr th {
+    page-break-inside: avoid;
+    padding: 0.3rem !important;
+  }
+
+  .bills-container {
+    margin: 0 !important;
+  }
+}
+
+.bills-container.max-w > div {
+  max-width: 35%;
+}

@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 import {selectDrinkPreference, selectUserEmail} from "../redux/user.slice";
 import {useConsumeDrinkMutation, useGetDrinksQuery} from "../redux/drinks.api";
 import {useNavigate} from "react-router-dom";
-import DrinksNavbar from "./DrinksNavbar";
+import DMSNavbar from "../shared/DMSNavbar";
 
 function ConsumeDrink() {
 	const navigate = useNavigate();
@@ -30,7 +30,7 @@ function ConsumeDrink() {
 	}
 	return (
 		<div className={"min-vh-100 d-flex flex-column"}>
-			<DrinksNavbar/>
+			<DMSNavbar/>
 			<Container fluid={true} className={"flex-grow-1 d-grid"}>
 				<Row>
 					<Col className={"d-flex flex-column justify-content-evenly"}>

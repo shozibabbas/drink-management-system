@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import DrinksNavbar from "./DrinksNavbar";
+import DMSNavbar from "../shared/DMSNavbar";
 
 DrinksLayout.propTypes = {
 	children: PropTypes.any
@@ -9,7 +9,7 @@ DrinksLayout.propTypes = {
 function DrinksLayout({children}) {
 	return (
 		<>
-			<DrinksNavbar/>
+			<DMSNavbar/>
 			{children}
 		</>
 	);

@@ -4,9 +4,9 @@ import {selectGuestDetails, selectIsLoggedIn} from "../redux/user.slice";
 import {useGetDrinksQuery, useGuestConsumeDrinkMutation} from "../redux/drinks.api";
 import {Button, Col, Container, Form, FormControl, FormGroup, Row, Spinner} from "react-bootstrap";
 import {Formik} from "formik";
-import GuestNavbar from "./GuestNavbar";
 import * as Yup from "yup";
 import {useNavigate} from "react-router-dom";
+import DMSNavbar from "../shared/DMSNavbar";
 
 const GuestConsumeDrinkSchema = Yup.object().shape({
 	email: Yup.string()
@@ -51,7 +51,7 @@ function GuestConsumeDrink() {
 	}
 	return (
 		<div className={"min-vh-100 d-flex flex-column"}>
-			<GuestNavbar/>
+			<DMSNavbar/>
 			<Container fluid={true} className={"flex-grow-1 d-grid"}>
 				<Row>
 					<Col className={"d-flex flex-column justify-content-evenly"}>
@@ -91,6 +91,7 @@ function GuestConsumeDrink() {
 													onBlur={handleBlur}
 													value={values.email}
 													isInvalid={touched.email && errors.email}
+													readOnly={isSuccess && !isUninitialized}
 												/>
 												<Form.Control.Feedback type={"invalid"}>
 													{errors.email}
@@ -108,6 +109,7 @@ function GuestConsumeDrink() {
 															onBlur={handleBlur}
 															value={values.password}
 															isInvalid={touched.password && errors.password}
+															readOnly={isSuccess && !isUninitialized}
 														/>
 														<Form.Control.Feedback type={"invalid"}>
 															{errors.password}
@@ -135,6 +137,7 @@ function GuestConsumeDrink() {
 													onBlur={handleBlur}
 													value={values.name}
 													isInvalid={touched.name && errors.name}
+													readOnly={isSuccess && !isUninitialized}
 												/>
 												<Form.Control.Feedback type={"invalid"}>
 													{errors.name}
@@ -152,6 +155,7 @@ function GuestConsumeDrink() {
 													}}
 													value={values.drinkId}
 													isInvalid={touched.drinkId && errors.drinkId}
+													disabled={isSuccess && !isUninitialized}
 												>
 													<option value={0}>Select a Drink</option>
 													{
@@ -176,6 +180,7 @@ function GuestConsumeDrink() {
 													isInvalid={touched.quantity && errors.quantity}
 													min={1}
 													max={5}
+													readOnly={isSuccess && !isUninitialized}
 												/>
 												<Form.Control.Feedback type={"invalid"}>
 													{errors.quantity}

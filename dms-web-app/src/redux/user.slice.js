@@ -73,3 +73,5 @@ export const selectIsLoggedIn = state => !!state[sliceName].access_token;
 export const selectUserEmail = state => state[sliceName].email;
 export const selectDrinkPreference = state => state[sliceName].drinkPreference;
 export const selectGuestDetails = state => state[sliceName].guestDetails;
+
+export const selectUserRole = state => state[sliceName].role;
