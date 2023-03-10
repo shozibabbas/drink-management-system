@@ -7,6 +7,7 @@ import { col, fn, Op, where } from 'sequelize';
 import { GuestConsumeDrinkDto } from '../common/dto/guest-consume-drink.dto';
 import { UsersService } from '../users/users.service';
 import { AuthService } from '../auth/auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class DrinksService {
@@ -16,6 +17,7 @@ export class DrinksService {
     @InjectModel(Drink) private drinkRepository: Repository<Drink>,
     @InjectModel(UserHasDrink)
     private userHasDrinkRepository: Repository<UserHasDrink>,
+    private configService: ConfigService,
   ) {}
 
   getDrinks() {
@@ -66,15 +68,14 @@ export class DrinksService {
       );
   }
 
-  async getAllUserDrinks({ year, month, userId }) {
-    const whereCondition = {
+  async getAllUserDrinks({ year, month, userId, rowsPerPage, page }) {
+    const whereCondition: any = {
       [Op.and]: [
         where(fn('YEAR', col('UserHasDrink.create_time')), year),
         where(fn('MONTH', col('UserHasDrink.create_time')), month),
       ],
     };
     if (userId && userId > 0) {
-      // @ts-ignore
       whereCondition[Op.and].push({ userId });
     }
     return this.userHasDrinkRepository
@@ -82,6 +83,8 @@ export class DrinksService {
         where: whereCondition,
         include: [User, Drink],
         order: [['id', 'DESC']],
+        limit: rowsPerPage,
+        offset: (page - 1) * rowsPerPage,
       })
       .then((uArr) => {
         const rows = uArr.rows.map((u, i) => ({
@@ -145,6 +148,43 @@ export class DrinksService {
         uArr.map((x) => ({
           id: x.User.id,
           name: x.User.name,
+        })),
+      );
+  }
+
+  async generateBills({ year, month, userId }) {
+    const whereCondition: any = {
+      [Op.and]: [
+        where(fn('YEAR', col('UserHasDrink.create_time')), year),
+        where(fn('MONTH', col('UserHasDrink.create_time')), month),
+      ],
+    };
+    if (userId && userId > 0) {
+      whereCondition[Op.and].push({ userId });
+    }
+    return this.userHasDrinkRepository
+      .findAll({
+        attributes: [
+          'userId',
+          'User.*',
+          [fn('COUNT', col('UserHasDrink.id')), 'count'],
+          [fn('SUM', col('UserHasDrink.is_deleted')), 'deleted'],
+        ],
+        where: whereCondition,
+        include: [User],
+        raw: true,
+        order: [['userId', 'DESC']],
+        group: ['userId'],
+      })
+      .then((res: any) =>
+        res.map((r: any) => ({
+          id: r['User.id'],
+          userName: r['User.name'],
+          count: r.count,
+          deleted: parseInt(r.deleted),
+          amount:
+            (r.count - parseInt(r.deleted)) *
+            this.configService.get<number>('DRINK_AMOUNT'),
         })),
       );
   }

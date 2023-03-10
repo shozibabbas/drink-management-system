@@ -28,6 +28,9 @@ const ENV = process.env.NODE_ENV;
       useFactory: async (configService: ConfigService) => {
         return {
           dialect: 'mysql',
+          dialectOptions: {
+            decimalNumbers: true,
+          },
           host: configService.get<string>('DB_HOST'),
           port: configService.get<number>('DB_PORT'),
           username: configService.get<string>('DB_USER'),

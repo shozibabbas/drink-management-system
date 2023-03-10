@@ -13,6 +13,7 @@ import { ConsumeDrinkDto } from '../common/dto/consume-drink.dto';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { User } from '../entities';
 import { GuestConsumeDrinkDto } from '../common/dto/guest-consume-drink.dto';
+import RoleGuard from '../common/guards/role.guard';
 
 @Controller('drinks')
 export class DrinksController {
@@ -48,31 +49,56 @@ export class DrinksController {
     return this.drinksService.getUserDrinks(currentUser.id, { year, month });
   }
 
+  @UseGuards(RoleGuard(2))
   @UseGuards(JwtAuthGuard)
   @Get('all_users')
   getDrinksOfAllUser(
     @Query('year') year,
     @Query('month') month,
     @Query('userId') userId,
+    @Query('rowsPerPage') rowsPerPage,
+    @Query('page') page,
   ) {
-    return this.drinksService.getAllUserDrinks({ year, month, userId });
+    rowsPerPage = parseInt(rowsPerPage);
+    page = parseInt(page);
+    return this.drinksService.getAllUserDrinks({
+      year,
+      month,
+      userId,
+      rowsPerPage,
+      page,
+    });
   }
 
+  @UseGuards(RoleGuard(2))
   @UseGuards(JwtAuthGuard)
   @Delete('user')
   deleteDrinkOfUser(@Query('id') id) {
     return this.drinksService.deleteUserDrink(id);
   }
 
+  @UseGuards(RoleGuard(2))
   @UseGuards(JwtAuthGuard)
   @Post('user')
   retrieveDrinkOfUser(@Body('id') id) {
     return this.drinksService.retrieveDrinkOfUser(id);
   }
 
+  @UseGuards(RoleGuard(2))
   @UseGuards(JwtAuthGuard)
   @Get('/drinking_users')
   getDrinkingUsers(@Query('year') year, @Query('month') month) {
     return this.drinksService.getDrinkingUsers({ year, month });
+  }
+
+  @UseGuards(RoleGuard(2))
+  @UseGuards(JwtAuthGuard)
+  @Get('/generate-bills')
+  async generateBills(
+    @Query('year') year,
+    @Query('month') month,
+    @Query('userId') userId,
+  ) {
+    return this.drinksService.generateBills({ year, month, userId });
   }
 }
