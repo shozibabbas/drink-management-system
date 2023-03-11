@@ -40,18 +40,20 @@ export const UserSlice = createSlice({
 		// 	}
 		// });
 		builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, action) => {
-			const {access_token, email, role} = action.payload;
+			const {access_token, email, role, name} = action.payload;
 			state.access_token = access_token;
 			state.email = email;
+			state.name = name;
 			state.role = role;
 		});
 		builder.addMatcher(drinksApi.endpoints.guestConsumeDrink.matchFulfilled, (state, action) => {
 			if (!action.payload) {
 				return;
 			}
-			const {access_token, email, role} = action.payload;
+			const {access_token, email, role, name} = action.payload;
 			state.access_token = access_token;
 			state.email = email;
+			state.name = name;
 			state.role = role;
 		});
 		builder.addMatcher(drinksApi.endpoints.consumeDrink.matchFulfilled, (state, action) => {
@@ -70,8 +72,9 @@ export const {
 } = UserSlice.actions;
 
 export const selectIsLoggedIn = state => !!state[sliceName].access_token;
-export const selectUserEmail = state => state[sliceName].email;
+export const selectUserDetails = state => ({email: state[sliceName].email, name: state[sliceName].name});
 export const selectDrinkPreference = state => state[sliceName].drinkPreference;
 export const selectGuestDetails = state => state[sliceName].guestDetails;
 
 export const selectUserRole = state => state[sliceName].role;
+export const selectIsAdmin = state => parseInt(state[sliceName].role?.split(":")[0]) === 2;

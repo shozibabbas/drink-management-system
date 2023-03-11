@@ -2,14 +2,14 @@ import React from "react";
 import {Button, Col, Container, Form, FormControl, FormGroup, Row, Spinner} from "react-bootstrap";
 import {Formik} from "formik";
 import {useSelector} from "react-redux";
-import {selectDrinkPreference, selectUserEmail} from "../redux/user.slice";
+import {selectDrinkPreference, selectUserDetails} from "../redux/user.slice";
 import {useConsumeDrinkMutation, useGetDrinksQuery} from "../redux/drinks.api";
 import {useNavigate} from "react-router-dom";
 import DMSNavbar from "../shared/DMSNavbar";
 
 function ConsumeDrink() {
 	const navigate = useNavigate();
-	const email = useSelector(selectUserEmail);
+	const {name, email} = useSelector(selectUserDetails);
 	const drinkPreference = useSelector(selectDrinkPreference);
 	const {data: drinks, isLoading: drinksIsLoading, error: drinksError} = useGetDrinksQuery();
 	const [consumeDrink, {isLoading, isSuccess, isUninitialized}] = useConsumeDrinkMutation();
@@ -37,6 +37,7 @@ function ConsumeDrink() {
 						<Row>
 							<Col sm={{offset: 2, span: 8}} md={{offset: 3, span: 6}}>
 								<h2 className={"text-center"}>Consume Drink</h2>
+								<p className={"text-center text-secondary"}>{name}</p>
 								<p className={"text-center mb-5 text-secondary"}>{email}</p>
 								<Formik
 									initialValues={{...drinkPreference}}

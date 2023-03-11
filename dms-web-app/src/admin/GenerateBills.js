@@ -91,7 +91,12 @@ function GenerateBills() {
 									</tr>
 									<tr>
 										<th>Quantity</th>
-										<td>{d.count} {d.deleted ? `(-${d.deleted})` : ""}</td>
+										<td>
+											<span
+												className={"d-block d-print-none"}>{d.count} <span
+													className={"text-warning"}>{d.deleted ? `(-${d.deleted})` : ""}</span></span>
+											<span className={"d-none d-print-block"}>{d.count - d.deleted}</span>
+										</td>
 									</tr>
 									<tr>
 										<th>Amount</th>

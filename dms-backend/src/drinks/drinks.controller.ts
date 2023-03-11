@@ -33,6 +33,13 @@ export class DrinksController {
     return this.drinksService.consumeDrink(consumeDrinkDto, currentUser.id);
   }
 
+  @UseGuards(RoleGuard(2))
+  @UseGuards(JwtAuthGuard)
+  @Post('bulk_consume')
+  async bulkConsumeDrink(@Body('inputs') inputs: GuestConsumeDrinkDto[]) {
+    return this.drinksService.bulkConsumeDrinks(inputs);
+  }
+
   @Post('guest/consume')
   async guestConsumeDrink(@Body() guestConsumeDrinkDto: GuestConsumeDrinkDto) {
     guestConsumeDrinkDto.password = guestConsumeDrinkDto.password?.trim();
@@ -84,11 +91,10 @@ export class DrinksController {
     return this.drinksService.retrieveDrinkOfUser(id);
   }
 
-  @UseGuards(RoleGuard(2))
   @UseGuards(JwtAuthGuard)
   @Get('/drinking_users')
   getDrinkingUsers(@Query('year') year, @Query('month') month) {
-    return this.drinksService.getDrinkingUsers({ year, month });
+    return this.drinksService.getAllUsers();
   }
 
   @UseGuards(RoleGuard(2))

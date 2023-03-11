@@ -61,3 +61,11 @@ $font-family-base: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Hel
 .bill-table th, .bill-table td {
   width: 50%;
 }
+
+.table-add-bulk .email, .table-add-bulk .name {
+  width: 25%;
+}
+
+.table-add-bulk .drink, .table-add-bulk .quantity, .table-add-bulk .actions {
+  width: 16%;
+}

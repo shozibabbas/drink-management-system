@@ -224,14 +224,16 @@ function AdminListing() {
 													d.isDeleted ? (
 														<Button variant={"outline-success"} size={"sm"}
 															onClick={() => retrieveUserDrink({
-																id: d.id
+																id: d.id,
+																...{year, month, userId, rowsPerPage, page}
 															})}>
 															<FontAwesomeIcon icon={faReply}/> Retrieve
 														</Button>
 													) : (
 														<Button variant={"outline-danger"} size={"sm"}
 															onClick={() => deleteUserDrink({
-																id: d.id
+																id: d.id,
+																...{year, month, userId, rowsPerPage, page}
 															})}>
 															<FontAwesomeIcon icon={faTrash}/> Delete
 														</Button>
@@ -247,7 +249,7 @@ function AdminListing() {
 				</Col>
 			</Row>
 			{
-				filteredData.length > 0 && (
+				count > 0 && (
 					<Row>
 						<Col>
 							<UltimatePaginationBootstrap5

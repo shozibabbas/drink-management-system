@@ -28,6 +28,7 @@ export class AuthService {
       }),
       expires_in: this.configService.get<string>('JWT_EXPIRES_IN'),
       email: user.email,
+      name: user.name,
       role: user.Role.id + ':' + user.Role.name,
     };
   }

@@ -12,6 +12,16 @@ export class UsersService {
     private userHasDrinkRepository: Repository<UserHasDrink>,
   ) {}
 
+  async getAll() {
+    return this.userRepository.findAll().then((res) =>
+      res.map((u) => ({
+        id: u.id,
+        email: u.email,
+        name: u.name,
+      })),
+    );
+  }
+
   async findOne(email: string, password: string = null) {
     return this.userRepository
       .findOne({
@@ -28,7 +38,7 @@ export class UsersService {
       });
   }
 
-  async getOrCreate(email: string, name: string, password: string) {
+  async getOrCreate(email: string, name: string, password: string = null) {
     const [user, created] = await this.userRepository.findOrCreate({
       where: {
         email,

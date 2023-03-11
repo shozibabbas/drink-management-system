@@ -45,6 +45,13 @@ export class DrinksService {
     }
   }
 
+  async bulkConsumeDrinks(bulkConsume: GuestConsumeDrinkDto[]) {
+    for (const c of bulkConsume) {
+      const { user } = await this.usersService.getOrCreate(c.email, c.name);
+      await this.consumeDrink(c, user.id);
+    }
+  }
+
   async getUserDrinks(userId: number, { year, month }) {
     return this.userHasDrinkRepository
       .findAll({
@@ -187,5 +194,9 @@ export class DrinksService {
             this.configService.get<number>('DRINK_AMOUNT'),
         })),
       );
+  }
+
+  async getAllUsers() {
+    return this.usersService.getAll();
   }
 }

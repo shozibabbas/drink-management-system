@@ -14,6 +14,7 @@ import GuestConsumeDrink from "./guest/GuestConsumeDrink";
 import AdminLayout from "./admin/AdminLayout";
 import AdminListing from "./admin/AdminListing";
 import GenerateBills from "./admin/GenerateBills";
+import AdminAddBulk from "./admin/AdminAddBulk";
 
 function App() {
 	const criticalError = useSelector(selectCriticalError);
@@ -48,6 +49,11 @@ function App() {
 					<Route path="generate-bills" element={
 						<ProtectedRoute>
 							<GenerateBills/>
+						</ProtectedRoute>
+					}/>
+					<Route path="add" element={
+						<ProtectedRoute>
+							<AdminAddBulk/>
 						</ProtectedRoute>
 					}/>
 					<Route index element={
