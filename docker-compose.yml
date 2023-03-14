@@ -1,0 +1,51 @@
+version: '3.8'
+
+networks:
+  default:
+
+services:
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin:5.2.1-apache
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - ${PMA_APP_LOCAL_PORT}:${PMA_APP_DOCKER_PORT}
+    env_file: ./.env
+    environment:
+      - PMA_HOST=${MYSQLDB_HOST}
+      - PMA_PORT=${MYSQLDB_DOCKER_PORT}
+      - MYSQL_ROOT_PASSWORD=${MYSQLDB_PASSWORD}
+    networks:
+      - default
+
+  db:
+    container_name: ${MYSQLDB_HOST}
+    image: mysql:8.0.31
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQLDB_PASSWORD}
+    ports:
+      - ${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}
+    volumes:
+      - mysql-volume:/var/lib/mysql:rw
+    networks:
+      - default
+
+  nestjs:
+    container_name: backend
+    depends_on:
+      - db
+    build: ./dms-backend
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - ${NESTJS_APP_LOCAL_PORT}:${NESTJS_APP_DOCKER_PORT}
+    command: node ./dist/main
+    networks:
+      - default
+volumes:
+  mysql-volume:
