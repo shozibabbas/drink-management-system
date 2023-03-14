@@ -6,7 +6,7 @@ export const drinksApi = createApi({
 	baseQuery: CustomFetchBaseQuery({
 		baseUrl: "/drinks"
 	}),
-	tagTypes: ["drinks", "admin-drinks"],
+	tagTypes: ["drinks", "admin-drinks", "admin-generate-bills"],
 	endpoints: builder => ({
 		getDrinks: builder.query({
 			query: () => "/",
@@ -32,8 +32,8 @@ export const drinksApi = createApi({
 			providesTags: ["admin-drinks"]
 		}),
 		deleteUserDrink: builder.mutation({
-			query: (params) => ({url: "/user", method: "delete", params}),
-			// invalidatesTags: ["admin-drinks"],
+			query: ({id}) => ({url: "/user", method: "delete", params: {id}}),
+			invalidatesTags: ["admin-generate-bills"],
 			async onQueryStarted({id, ...getAllUserDrinksParams}, {dispatch, queryFulfilled}) {
 				try {
 					await queryFulfilled;
@@ -49,8 +49,8 @@ export const drinksApi = createApi({
 			},
 		}),
 		retrieveUserDrink: builder.mutation({
-			query: (body) => ({url: "/user", method: "post", body}),
-			// invalidatesTags: ["admin-drinks"],
+			query: ({id}) => ({url: "/user", method: "post", body: {id}}),
+			invalidatesTags: ["admin-generate-bills"],
 			async onQueryStarted({id, ...getAllUserDrinksParams}, {dispatch, queryFulfilled}) {
 				try {
 					console.log("started");
@@ -73,7 +73,7 @@ export const drinksApi = createApi({
 		}),
 		generateBills: builder.query({
 			query: (params) => ({url: "/generate-bills", method: "get", params}),
-			providesTags: ["admin-drinks"]
+			providesTags: ["admin-generate-bills"]
 		}),
 	})
 });
